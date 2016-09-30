@@ -22,13 +22,19 @@ class EvaluatePostfix
     stack = Stack.new
 
     splitup.each do |element|
+      p stack
+      p '-----'
       case element
       when /^(0|[1-9][0-9]*)$/ #numeric?(element)
         stack.push(element.to_i)
-      when "+", "-", "*", "/", "^"
+      when "+", "-", "*", "/"
         stack.push(find_result(stack, element))
+      when "^"
+        rhs = stack.pop
+        lhs = stack.pop
+        stack.push(lhs ** rhs)
       else
-      	raise "Unexpected element! - #{element}"
+        raise "Unexpected element! - #{element}"
       end
     end
 
@@ -46,6 +52,6 @@ class EvaluatePostfix
   def find_result(stack, operator)
     rhs = stack.pop
     lhs = stack.pop
-    rhs.send(operator, lhs)
+    lhs.send(operator, rhs.to_f)
   end
 end

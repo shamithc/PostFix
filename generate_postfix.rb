@@ -40,6 +40,7 @@ class GeneratePostfix
 
   def execute
     operator_stack = Stack.new
+    p splitup
 
     splitup.each do |token|
       case token
@@ -51,6 +52,8 @@ class GeneratePostfix
         operator_operation(operator_stack, token)
       when ")"
         right_parenthesis_operation(operator_stack)
+       else
+       	raise "Unexpected token! - #{token}"
       end
     end
     process_remaining_stack(operator_stack)
